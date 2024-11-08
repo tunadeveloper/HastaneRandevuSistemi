@@ -1,0 +1,6 @@
+@HastaneRandevuSistemi_HostAddress = http://localhost:5259
+
+GET {{HastaneRandevuSistemi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

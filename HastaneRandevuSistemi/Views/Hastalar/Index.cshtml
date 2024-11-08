@@ -1,0 +1,27 @@
+﻿@model IEnumerable<HastaneRandevuSistemi.Models.Hasta>
+
+@{
+    ViewData["Title"] = "Hasta Listesi";
+}
+
+<h1>Hasta Listesi</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Ad</th>
+            <th>Soyad</th>
+            <th>TC Kimlik No</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var hasta in Model)
+        {
+            <tr>
+                <td>@hasta.Ad</td>
+                <td>@hasta.Soyad</td>
+                <td>@hasta.TCKimlikNo</td>
+            </tr>
+        }
+    </tbody>
+</table>
