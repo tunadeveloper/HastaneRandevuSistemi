@@ -1,0 +1,6 @@
+﻿@model IEnumerable<HastaneRandevuSistemi.Models.Doktor>
+
+@foreach (var doktor in Model)
+{
+    <option value="@doktor.DoktorId">@doktor.Ad @doktor.Soyad</option>
+}

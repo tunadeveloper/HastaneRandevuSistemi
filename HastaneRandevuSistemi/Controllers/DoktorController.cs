@@ -1,10 +1,7 @@
-﻿using HastaneRandevuSistemi.Data;
+﻿using Microsoft.AspNetCore.Mvc;
+using HastaneRandevuSistemi.Data;
 using HastaneRandevuSistemi.Models;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace HastaneRandevuSistemi.Controllers
@@ -18,53 +15,50 @@ namespace HastaneRandevuSistemi.Controllers
             _context = context;
         }
 
+        // Giriş sayfasını GET metodu ile yönlendirme
         [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
 
+        // Login işlemi POST metodu ile yapılacak
         [HttpPost]
-        public async Task<IActionResult> Login(string TCKimlikNo, string Sifre)
+        public IActionResult Login(string tckimlikNo, string sifre)
         {
-            // Doktoru veritabanında kontrol et
-            var doktor = _context.Doktorlar.FirstOrDefault(d => d.TCKimlikNo == TCKimlikNo && d.Sifre == Sifre);
+            var doktor = _context.Doktorlar
+                .FirstOrDefault(d => d.TCKimlikNo == tckimlikNo && d.Sifre == sifre);
 
             if (doktor != null)
             {
-                // Kullanıcı bilgilerini ve rollerini içeren Claims
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.NameIdentifier, doktor.DoktorId.ToString()),
-                    new Claim(ClaimTypes.Name, doktor.Ad),
-                    new Claim(ClaimTypes.Role, "Doktor")
-                };
-
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                var authProperties = new AuthenticationProperties
-                {
-                    IsPersistent = true, // Kalıcı oturum
-                    ExpiresUtc = DateTimeOffset.UtcNow.AddHours(1)
-                };
-
-                // Cookie oluştur
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
-
-                return RedirectToAction("Index", "Doktor");
+                // Giriş başarılı, cookie oluşturma
+                Response.Cookies.Append("DoktorId", doktor.DoktorId.ToString());
+                return RedirectToAction("RandevuListesi");
             }
-            else
-            {
-                // Hatalı giriş
-                ModelState.AddModelError("", "Geçersiz TC Kimlik No veya şifre.");
-                return View();
-            }
+
+            // Giriş başarısız
+            ViewData["ErrorMessage"] = "Hatalı kimlik bilgisi.";
+            return View();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Logout()
+        // Giriş yaptıktan sonra yönlendirilecek sayfa
+        public IActionResult RandevuListesi()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Login", "Doktor");
+            // DoktorId'yi cookie'den al
+            var doktorId = Request.Cookies["DoktorId"];
+            if (doktorId == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            // Doktora ait randevular ve hastalar
+            var randevular = _context.Randevular
+                .Where(r => r.DoktorId == int.Parse(doktorId) && !r.IptalEdildi)
+                .Include(r => r.Hasta) // Randevudaki hastayı dahil et
+                .ToList();
+
+            // View'a randevular ve hastalar
+            return View(randevular);
         }
     }
 }

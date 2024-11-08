@@ -10,7 +10,9 @@
         public string RandevuSebebi { get; set; }
         public bool IptalEdildi { get; set; }
 
-
+        public string HastaAd { get; set; }
+        public string HastaSoyad { get; set; }
+        public string HastaTC { get; set; }
         public Hasta Hasta { get; set; }
         public Doktor Doktor { get; set; }
     }

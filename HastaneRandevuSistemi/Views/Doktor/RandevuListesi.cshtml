@@ -1,0 +1,33 @@
+﻿@model IEnumerable<HastaneRandevuSistemi.Models.Randevu>
+
+@{
+    ViewData["Title"] = "Randevu ve Hasta Listesi";
+}
+
+<h1>Randevular</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Randevu Tarihi</th>
+            <th>Randevu Saati</th>
+            <th>Randevu Sebebi</th>
+            <th>Hasta Adı</th>
+            <th>Hasta Soyadı</th>
+            <th>Hasta TC Kimlik No</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var randevu in Model)
+        {
+            <tr>
+                <td>@randevu.RandevuTarihi.ToString("yyyy-MM-dd")</td>
+                <td>@randevu.RandevuSaati</td>
+                <td>@randevu.RandevuSebebi</td>
+                <td>@randevu.Hasta.Ad</td>
+                <td>@randevu.Hasta.Soyad</td>
+                <td>@randevu.Hasta.TCKimlikNo</td>
+            </tr>
+        }
+    </tbody>
+</table>
