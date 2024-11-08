@@ -8,7 +8,7 @@
         public DateTime RandevuTarihi { get; set; }
         public string RandevuSaati { get; set; }
         public string RandevuSebebi { get; set; }
-        public bool IptalEdildi { get; set; }
+      
 
         public string HastaAd { get; set; }
         public string HastaSoyad { get; set; }

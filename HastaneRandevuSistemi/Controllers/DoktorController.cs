@@ -53,7 +53,7 @@ namespace HastaneRandevuSistemi.Controllers
 
             // Doktora ait randevular ve hastalar
             var randevular = _context.Randevular
-                .Where(r => r.DoktorId == int.Parse(doktorId) && !r.IptalEdildi)
+                .Where(r => r.DoktorId == int.Parse(doktorId))
                 .Include(r => r.Hasta) // Randevudaki hastayı dahil et
                 .ToList();
 

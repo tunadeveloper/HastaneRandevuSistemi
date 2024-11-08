@@ -1,58 +1,101 @@
-﻿<form asp-action="RandevuOlustur" method="post">
-    <!-- Hasta bilgileri -->
-    <div class="form-group">
-        <label for="Ad">Ad</label>
-        <input type="text" id="Ad" name="Ad" class="form-control" required />
-    </div>
+﻿@model List<string>
 
-    <div class="form-group">
-        <label for="Soyad">Soyad</label>
-        <input type="text" id="Soyad" name="Soyad" class="form-control" required />
-    </div>
+@{
+    ViewData["Title"] = "Randevu Oluştur";
+}
 
-    <div class="form-group">
-        <label for="TCKimlikNo">TC Kimlik No</label>
-        <input type="text" id="TCKimlikNo" name="TCKimlikNo" class="form-control" required />
-    </div>
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Uzmanlık alanı seçimi -->
-    <div class="form-group">
-        <label for="UzmanlikAlani">Uzmanlık Alanı</label>
-        <select id="UzmanlikAlani" name="UzmanlikAlani" class="form-control" required>
-            <option value="">Bir uzmanlık alanı seçin</option>
-            @foreach (var alan in ViewBag.UzmanlikAlanlari)
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="row w-100">
+        <div class="col-md-8 col-lg-6 mx-auto">
+            <h2 class="text-center mb-4">@ViewData["Title"]</h2>
+
+            <!-- Başarı veya Hata Mesajı -->
+            @if (ViewData["SuccessMessage"] != null)
             {
-                <option value="@alan">@alan</option>
+                <div class="alert alert-success">
+                    @ViewData["SuccessMessage"]
+                </div>
             }
-        </select>
-    </div>
 
-    <!-- Doktor seçimi -->
-    <div class="form-group">
-        <label for="Doktor">Doktor</label>
-        <select id="Doktor" name="DoktorId" class="form-control" required>
-            <option value="">Doktoru seçin</option>
-        </select>
-    </div>
+            @if (ViewData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewData["ErrorMessage"]
+                </div>
+            }
 
-    <!-- Randevu tarih ve saat -->
-    <div class="form-group">
-        <label for="RandevuTarihi">Randevu Tarihi</label>
-        <input type="date" id="RandevuTarihi" name="RandevuTarihi" class="form-control" required />
-    </div>
+            <!-- Randevu Oluştur Formu -->
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <form asp-action="RandevuOlustur" method="post">
+                        <!-- Hasta Bilgileri -->
+                        <div class="form-group mb-3">
+                            <label for="HastaAd">Hasta Adı</label>
+                            <input type="text" id="HastaAd" name="HastaAd" class="form-control" required />
+                        </div>
 
-    <div class="form-group">
-        <label for="RandevuSaati">Randevu Saati</label>
-        <input type="time" id="RandevuSaati" name="RandevuSaati" class="form-control" required />
-    </div>
+                        <div class="form-group mb-3">
+                            <label for="HastaSoyad">Hasta Soyadı</label>
+                            <input type="text" id="HastaSoyad" name="HastaSoyad" class="form-control" required />
+                        </div>
 
-    <div class="form-group">
-        <label for="RandevuSebebi">Randevu Sebebi</label>
-        <textarea id="RandevuSebebi" name="RandevuSebebi" class="form-control"></textarea>
-    </div>
+                        <div class="form-group mb-3">
+                            <label for="HastaTC">Hasta TC Kimlik No</label>
+                            <input type="text" id="HastaTC" name="HastaTC" class="form-control" required />
+                        </div>
 
-    <button type="submit" class="btn btn-primary">Randevu Oluştur</button>
-</form>
+                        <!-- Uzmanlık Alanı Seçimi -->
+                        <div class="form-group mb-3">
+                            <label for="UzmanlikAlani">Uzmanlık Alanı Seçin</label>
+                            <select id="UzmanlikAlani" name="UzmanlikAlani" class="form-control" required>
+                                <option value="">Lütfen bir uzmanlık alanı seçin</option>
+                                @foreach (var alan in Model)
+                                {
+                                    <option value="@alan">@alan</option>
+                                }
+                            </select>
+                        </div>
+
+                        <!-- Doktor Seçimi -->
+                        <div class="form-group mb-3">
+                            <label for="Doktor">Doktor Seçin</label>
+                            <select id="Doktor" name="DoktorId" class="form-control" required>
+                                <option value="">Lütfen bir doktor seçin</option>
+                                <option value="1">1</option>
+                            </select>
+                        </div>
+
+                        <!-- Randevu Tarihi -->
+                        <div class="form-group mb-3">
+                            <label for="RandevuTarihi">Randevu Tarihi</label>
+                            <input type="date" id="RandevuTarihi" name="RandevuTarihi" class="form-control" required />
+                        </div>
+
+                        <!-- Randevu Saati -->
+                        <div class="form-group mb-3">
+                            <label for="RandevuSaati">Randevu Saati</label>
+                            <input type="time" id="RandevuSaati" name="RandevuSaati" class="form-control" required />
+                        </div>
+
+                        <!-- Randevu Sebebi -->
+                        <div class="form-group mb-3">
+                            <label for="RandevuSebebi">Randevu Sebebi</label>
+                            <textarea id="RandevuSebebi" name="RandevuSebebi" class="form-control"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Randevu Oluştur</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 @section Scripts {
     <script>
@@ -60,14 +103,35 @@
             $('#UzmanlikAlani').change(function () {
                 var uzmanlikAlani = $(this).val();
                 if (uzmanlikAlani) {
-                    // AJAX isteği ile doktorları getir
+                    // Seçilen uzmanlık alanına göre doktorları getir
                     $.get('@Url.Action("DoktorlariGetir", "Randevu")', { uzmanlikAlani: uzmanlikAlani }, function (data) {
-                        // Doktor seçeneğine gelen doktorları yükle
-                        $('#Doktor').html('<option value="">Doktoru seçin</option>');
-                        $.each(data, function (i, doktor) {
-                            $('#Doktor').append('<option value="' + doktor.doktorId + '">' + doktor.ad + ' ' + doktor.soyad + '</option>');
-                        });
+                        // Doktor dropdown'ını temizle
+                        $('#Doktor').empty();
+                        // "Lütfen bir doktor seçin" seçeneğini tekrar ekle
+                        $('#Doktor').append('<option value="">Lütfen bir doktor seçin</option>');
+
+                        if (data.length > 0) {
+                            // Yeni seçenekleri ekle
+                            $.each(data, function (i, doktor) {
+                                $('#Doktor').append('<option value="' + doktor.DoktorId + '">' + doktor.Ad + ' ' + doktor.Soyad + '</option>');
+                            });
+                        } else {
+                            $('#Doktor').append('<option value="">Bu uzmanlık alanında doktor bulunmamaktadır</option>');
+                        }
+                    }).fail(function () {
+                        alert('Doktorlar yüklenirken bir hata oluştu.');
                     });
+                } else {
+                    $('#Doktor').empty();
+                    $('#Doktor').append('<option value="">Lütfen bir uzmanlık alanı seçin</option>');
+                }
+            });
+
+            // Formun submit edilmesi
+            $('form').submit(function (e) {
+                if ($('#Doktor').val() == "") {
+                    alert("Lütfen bir doktor seçin.");
+                    e.preventDefault(); // Formun gönderilmesini engelle
                 }
             });
         });

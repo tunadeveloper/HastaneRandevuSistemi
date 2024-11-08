@@ -4,6 +4,7 @@ using HastaneRandevuSistemi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HastaneRandevuSistemi.Migrations
 {
     [DbContext(typeof(HastaneDbContext))]
-    partial class HastaneDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241108192339_m4")]
+    partial class m4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -108,14 +111,14 @@ namespace HastaneRandevuSistemi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RandevuId"));
 
-                    b.Property<int>("DoktorId")
+                    b.Property<int?>("DoktorId")
                         .HasColumnType("int");
 
                     b.Property<string>("HastaAd")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("HastaId")
+                    b.Property<int?>("HastaId")
                         .HasColumnType("int");
 
                     b.Property<string>("HastaSoyad")
@@ -150,15 +153,11 @@ namespace HastaneRandevuSistemi.Migrations
                 {
                     b.HasOne("HastaneRandevuSistemi.Models.Doktor", "Doktor")
                         .WithMany()
-                        .HasForeignKey("DoktorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DoktorId");
 
                     b.HasOne("HastaneRandevuSistemi.Models.Hasta", "Hasta")
                         .WithMany()
-                        .HasForeignKey("HastaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("HastaId");
 
                     b.Navigation("Doktor");
 

@@ -4,6 +4,7 @@ using HastaneRandevuSistemi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HastaneRandevuSistemi.Migrations
 {
     [DbContext(typeof(HastaneDbContext))]
-    partial class HastaneDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241108184923_m2")]
+    partial class m2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,11 +57,12 @@ namespace HastaneRandevuSistemi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UzmanlikAlani")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("UzmanlikAlaniId")
+                        .HasColumnType("int");
 
                     b.HasKey("DoktorId");
+
+                    b.HasIndex("UzmanlikAlaniId");
 
                     b.ToTable("Doktorlar");
                 });
@@ -126,6 +130,9 @@ namespace HastaneRandevuSistemi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IptalEdildi")
+                        .HasColumnType("bit");
+
                     b.Property<string>("RandevuSaati")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -144,6 +151,34 @@ namespace HastaneRandevuSistemi.Migrations
                     b.HasIndex("HastaId");
 
                     b.ToTable("Randevular");
+                });
+
+            modelBuilder.Entity("HastaneRandevuSistemi.Models.UzmanlikAlani", b =>
+                {
+                    b.Property<int>("UzmanlikAlaniId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UzmanlikAlaniId"));
+
+                    b.Property<string>("Ad")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UzmanlikAlaniId");
+
+                    b.ToTable("UzmanlikAlanlari");
+                });
+
+            modelBuilder.Entity("HastaneRandevuSistemi.Models.Doktor", b =>
+                {
+                    b.HasOne("HastaneRandevuSistemi.Models.UzmanlikAlani", "uzmanlikAlani")
+                        .WithMany()
+                        .HasForeignKey("UzmanlikAlaniId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("uzmanlikAlani");
                 });
 
             modelBuilder.Entity("HastaneRandevuSistemi.Models.Randevu", b =>

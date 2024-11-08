@@ -9,7 +9,6 @@ namespace HastaneRandevuSistemi.Data
             : base(options)
         {
         }
-
         public DbSet<Hasta> Hastalar { get; set; }
         public DbSet<Doktor> Doktorlar { get; set; }
         public DbSet<Randevu> Randevular { get; set; }

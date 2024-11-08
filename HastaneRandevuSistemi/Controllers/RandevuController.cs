@@ -17,17 +17,23 @@ namespace HastaneRandevuSistemi.Controllers
         // Uzmanlık alanlarını doldurmak için
         public IActionResult Create()
         {
-            ViewBag.UzmanlikAlanlari = _context.Doktorlar
+            // Uzmanlık alanlarını ViewBag yerine ViewModel üzerinden gönder
+            var uzmanlikAlanlari = _context.Doktorlar
                 .Select(d => d.UzmanlikAlani)
                 .Distinct()
                 .ToList();
 
-            return View();
+            return View(uzmanlikAlanlari);
         }
 
         [HttpGet]
         public JsonResult DoktorlariGetir(string uzmanlikAlani)
         {
+            if (string.IsNullOrEmpty(uzmanlikAlani))
+            {
+                return Json(new { success = false, message = "Uzmanlık alanı seçilmedi." });
+            }
+
             var doktorlar = _context.Doktorlar
                 .Where(d => d.UzmanlikAlani == uzmanlikAlani)
                 .Select(d => new { d.DoktorId, d.Ad, d.Soyad })
@@ -35,6 +41,7 @@ namespace HastaneRandevuSistemi.Controllers
 
             return Json(doktorlar);
         }
+
 
         [HttpPost]
         public IActionResult RandevuOlustur(string hastaAd, string hastaSoyad, string hastaTC, int doktorId, string randevuTarihi, string randevuSaati, string randevuSebebi)
@@ -50,8 +57,7 @@ namespace HastaneRandevuSistemi.Controllers
                 DoktorId = doktorId,
                 RandevuTarihi = DateTime.Parse(randevuTarihi),
                 RandevuSaati = randevuSaati,
-                RandevuSebebi = randevuSebebi,
-                IptalEdildi = false
+                RandevuSebebi = randevuSebebi
             };
 
             _context.Randevular.Add(randevu);
