@@ -4,7 +4,6 @@
     ViewData["Title"] = "Randevu Oluştur";
 }
 
-<!-- Bootstrap CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
@@ -12,7 +11,6 @@
         <div class="col-md-8 col-lg-6 mx-auto">
             <h2 class="text-center mb-4">@ViewData["Title"]</h2>
 
-            <!-- Başarı veya Hata Mesajı -->
             @if (ViewData["SuccessMessage"] != null)
             {
                 <div class="alert alert-success">
@@ -27,11 +25,9 @@
                 </div>
             }
 
-            <!-- Randevu Oluştur Formu -->
             <div class="card shadow-lg">
                 <div class="card-body">
                     <form asp-action="RandevuOlustur" method="post">
-                        <!-- Hasta Bilgileri -->
                         <div class="form-group mb-3">
                             <label for="HastaAd">Hasta Adı</label>
                             <input type="text" id="HastaAd" name="HastaAd" class="form-control" required />
@@ -47,7 +43,6 @@
                             <input type="text" id="HastaTC" name="HastaTC" class="form-control" required />
                         </div>
 
-                        <!-- Uzmanlık Alanı Seçimi -->
                         <div class="form-group mb-3">
                             <label for="UzmanlikAlani">Uzmanlık Alanı Seçin</label>
                             <select id="UzmanlikAlani" name="UzmanlikAlani" class="form-control" required>
@@ -59,7 +54,6 @@
                             </select>
                         </div>
 
-                        <!-- Doktor Seçimi -->
                         <div class="form-group mb-3">
                             <label for="Doktor">Doktor Seçin</label>
                             <select id="Doktor" name="DoktorId" class="form-control" required>
@@ -68,19 +62,16 @@
                             </select>
                         </div>
 
-                        <!-- Randevu Tarihi -->
                         <div class="form-group mb-3">
                             <label for="RandevuTarihi">Randevu Tarihi</label>
                             <input type="date" id="RandevuTarihi" name="RandevuTarihi" class="form-control" required />
                         </div>
 
-                        <!-- Randevu Saati -->
                         <div class="form-group mb-3">
                             <label for="RandevuSaati">Randevu Saati</label>
                             <input type="time" id="RandevuSaati" name="RandevuSaati" class="form-control" required />
                         </div>
 
-                        <!-- Randevu Sebebi -->
                         <div class="form-group mb-3">
                             <label for="RandevuSebebi">Randevu Sebebi</label>
                             <textarea id="RandevuSebebi" name="RandevuSebebi" class="form-control"></textarea>
@@ -94,7 +85,6 @@
     </div>
 </div>
 
-<!-- Bootstrap JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 @section Scripts {
@@ -103,15 +93,12 @@
             $('#UzmanlikAlani').change(function () {
                 var uzmanlikAlani = $(this).val();
                 if (uzmanlikAlani) {
-                    // Seçilen uzmanlık alanına göre doktorları getir
                     $.get('@Url.Action("DoktorlariGetir", "Randevu")', { uzmanlikAlani: uzmanlikAlani }, function (data) {
-                        // Doktor dropdown'ını temizle
+                      
                         $('#Doktor').empty();
-                        // "Lütfen bir doktor seçin" seçeneğini tekrar ekle
                         $('#Doktor').append('<option value="">Lütfen bir doktor seçin</option>');
 
                         if (data.length > 0) {
-                            // Yeni seçenekleri ekle
                             $.each(data, function (i, doktor) {
                                 $('#Doktor').append('<option value="' + doktor.DoktorId + '">' + doktor.Ad + ' ' + doktor.Soyad + '</option>');
                             });
@@ -127,11 +114,10 @@
                 }
             });
 
-            // Formun submit edilmesi
             $('form').submit(function (e) {
                 if ($('#Doktor').val() == "") {
                     alert("Lütfen bir doktor seçin.");
-                    e.preventDefault(); // Formun gönderilmesini engelle
+                    e.preventDefault();
                 }
             });
         });

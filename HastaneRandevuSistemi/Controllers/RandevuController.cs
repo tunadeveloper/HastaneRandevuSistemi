@@ -14,10 +14,8 @@ namespace HastaneRandevuSistemi.Controllers
             _context = context;
         }
 
-        // Uzmanlık alanlarını doldurmak için
         public IActionResult Create()
         {
-            // Uzmanlık alanlarını ViewBag yerine ViewModel üzerinden gönder
             var uzmanlikAlanlari = _context.Doktorlar
                 .Select(d => d.UzmanlikAlani)
                 .Distinct()
@@ -46,7 +44,7 @@ namespace HastaneRandevuSistemi.Controllers
         [HttpPost]
         public IActionResult RandevuOlustur(string hastaAd, string hastaSoyad, string hastaTC, int doktorId, string randevuTarihi, string randevuSaati, string randevuSebebi)
         {
-            var hastaId = 1; // Giriş yapan kullanıcının ID'si (Statik örnek)
+            var hastaId = 1;
 
             var randevu = new Randevu
             {
@@ -66,7 +64,6 @@ namespace HastaneRandevuSistemi.Controllers
             return RedirectToAction("RandevuSuccess");
         }
 
-        // Randevu başarılı mesajı
         public IActionResult RandevuSuccess()
         {
             return View();
